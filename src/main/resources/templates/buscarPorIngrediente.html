@@ -12,7 +12,13 @@
 
 	<!-- Header -->
 	<header class="bg-primary text-white py-5 text-center">
-		<h1 th:text="'Recetas con: ' + (${comida != null && !#strings.isEmpty(comida) ? comida : letter})">Recetas con...</h1>
+		<h1
+			th:text="'Recetas con: ' + (${comida != null && !#strings.isEmpty(comida) ? comida : (letter != null && !#strings.isEmpty(letter) ? letter : 'N/A')})">
+			Recetas con...</h1>
+
+		<div th:if="${error != null}">
+			<div class="alert alert-danger" th:text="${error}"></div>
+		</div>
 		<p>Descubre recetas deliciosas que contienen el ingrediente que
 			buscas</p>
 	</header>
@@ -52,6 +58,9 @@
 
 	<!-- Footer -->
 	<footer class="bg-dark text-white text-center py-3 mt-5">
+		<div class="text-center my-4">
+			<a th:href="@{/}" class="btn btn-primary btn-lg">Volver al Inicio</a>
+		</div>
 		<p>&copy; 2024 Recetas Aleatorias. Todos los derechos reservados.</p>
 	</footer>
 

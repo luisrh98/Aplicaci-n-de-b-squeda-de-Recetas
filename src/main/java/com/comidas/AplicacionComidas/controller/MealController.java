@@ -68,27 +68,36 @@ public class MealController {
 	
 	@GetMapping("/meal")
 	public String getMealDetails(@RequestParam(required = false) String comida,
+	                             @RequestParam(required = false) String letter,
 	                             Model model) {
 
-	    if (comida == null || comida.isBlank()) {
-	        model.addAttribute("error", "No se especificó el nombre de la receta.");
-	        return "error";
+	    if ((comida == null || comida.isBlank()) && (letter == null || letter.isBlank())) {
+	        model.addAttribute("error", "Debe proporcionar al menos un ingrediente o una letra.");
+	        return "index";
 	    }
 
+	    String searchQuery = comida != null ? comida : letter; // Usar comida si está presente, de lo contrario usar letter.
+
 	    // Busca la receta por nombre
-	    Meal meal = jsonFetcherService.fetchMealByName(comida);
+	    Meal meal = jsonFetcherService.fetchMealByName(searchQuery);
 
 	    if (meal == null) {
-	        model.addAttribute("error", "No se encontró la receta con el nombre: " + comida);
-	        return "error";
+	        model.addAttribute("error", "No se encontró la receta con el nombre o letra: " + searchQuery);
+	        return "index";
 	    }
 
 	    model.addAttribute("meal", meal);
 	    return "meal-details";
 	}
-	
+
 	@GetMapping("/mealByLetter")
-	public String fetchMealByFirstLetter(Model model, @RequestParam String letter) {
+	public String fetchMealByFirstLetter(Model model, @RequestParam(required = false) String letter) {
+
+	    if (letter == null || letter.isBlank()) {
+	        model.addAttribute("error", "Debe especificar una letra para buscar recetas.");
+	        return "index";
+	    }
+
 	    // Obtener el JSON de la API
 	    String json = jsonFetcherService.fetchMealByFirstLetter(letter);
 
@@ -99,9 +108,14 @@ public class MealController {
 	        if (mealResponse.getMeals() != null && !mealResponse.getMeals().isEmpty()) {
 	            model.addAttribute("mealResponse", mealResponse);  // Pasa mealResponse al modelo
 	            model.addAttribute("letter", letter);
+	        } else {
+	            model.addAttribute("error", "No se encontraron recetas con la letra: " + letter);
+	            return "index";
 	        }
 	    } catch (Exception e) {
 	        e.printStackTrace();
+	        model.addAttribute("error", "Hubo un problema al procesar su solicitud.");
+	        return "index";
 	    }
 
 	    return "buscarPorIngrediente";  // Nombre de la vista
