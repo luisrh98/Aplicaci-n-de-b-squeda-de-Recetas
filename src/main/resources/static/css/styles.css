@@ -1,0 +1,51 @@
+body {
+    background-color: #f8f9fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+header h1 {
+    font-size: 36px;
+    font-weight: 600;
+}
+
+footer {
+    background-color: #343a40;
+    color: white;
+    font-size: 14px;
+}
+
+footer p {
+    margin: 0;
+}
+
+.meal-info {
+    text-align: center;
+}
+
+.meal-info img {
+    height: 30%; /* Ajuste para que la imagen no sea demasiado grande */
+    max-width: 400px;
+    object-fit: cover;
+}
+
+.ingredients-list li {
+    font-size: 16px;
+}
+
+.recipe-source a {
+    font-weight: bold;
+}
+
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 28px;
+    }
+
+    .meal-info img {
+        height: 30%;
+    }
+
+    .ingredients-list li {
+        font-size: 14px;
+    }
+}

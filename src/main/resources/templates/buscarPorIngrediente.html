@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Recetas con Ingrediente</title>
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+	rel="stylesheet">
+<link rel="stylesheet" href="/css/styles.css"
+	th:href="@{/css/styles.css}" />
+</head>
+<body class="bg-light">
+
+	<!-- Header -->
+	<header class="bg-primary text-white py-5 text-center">
+		<h1 th:text="'Recetas con: ' + (${comida != null && !#strings.isEmpty(comida) ? comida : letter})">Recetas con...</h1>
+		<p>Descubre recetas deliciosas que contienen el ingrediente que
+			buscas</p>
+	</header>
+
+	<!-- Container -->
+	<div class="container mt-5">
+		<!-- Mensaje de error si no hay recetas -->
+		<div th:if="${error}" class="alert alert-danger text-center">
+			<p th:text="${error}"></p>
+		</div>
+
+		<!-- Recetas encontradas -->
+		<div th:if="${mealResponse}"
+			class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+			<div th:each="meal : ${mealResponse.meals}" class="col">
+				<div class="card h-100 shadow-sm">
+					<!-- Imagen de la receta -->
+					<a th:href="@{/meal(comida=${meal.strMeal})}"> <img
+						th:src="${meal.strMealThumb}" class="card-img-top"
+						alt="Imagen de la receta - ${meal.strMeal}" />
+					</a>
+
+					<div class="card-body">
+						<h5 class="card-title" th:text="${meal.strMeal}">Nombre de la
+							receta</h5>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Si no hay recetas, mostrar mensaje -->
+		<div th:if="${#lists.isEmpty(mealResponse.meals)}" class="text-center">
+			<p>No se encontraron más recetas con el ingrediente
+				proporcionado. Intenta con otro.</p>
+		</div>
+	</div>
+
+	<!-- Footer -->
+	<footer class="bg-dark text-white text-center py-3 mt-5">
+		<p>&copy; 2024 Recetas Aleatorias. Todos los derechos reservados.</p>
+	</footer>
+
+	<!-- Bootstrap JS -->
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
